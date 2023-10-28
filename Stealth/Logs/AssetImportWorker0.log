@@ -144,3 +144,4 @@ Received Import Request.
 Start importing Assets/UniversalRenderPipelineAsset_Renderer.asset using Guid(d30a18f6a4e25f7448b0db0af2dbf238) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'beaf965654fcb307c0dd3169580e146a') in 0.019047 seconds 
   Import took 0.030510 seconds .
 
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
