@@ -8,8 +8,8 @@ public class PlayerManager : MonoBehaviour
     public Camera fpsCamera;
 
     // floats
-      // Movement
-      [Header("Movement Floats")]
+    // Movement
+    [Header("Movement Floats")]
 
     public float Jump_Height;
     [HideInInspector] public float Gravity = 15;
@@ -20,11 +20,25 @@ public class PlayerManager : MonoBehaviour
     public float SlideFricton;
     public float Sprint_LerpScaleTime;
     public float walkSpeed;
+
+    public float speedH = 2.0f;
+    public float speedV = 2.0f;
+
+    private float yaw = 0.0f;
+    private float pitch = 0.0f;
+
+
+    // Stats effected by metals
+    public float strength = 10f;
+    public float healthRegen = 10f;
+    public float fov = 90f;
+    public float visionRange = 30f;
     // Bools
     // Movement
     public bool isRunning = false;
     public bool isSliding = false;
     public bool isGrounded;
+
     // Vector3s
     [HideInInspector] public Vector3 velocity;
     public Vector3 primaryVelocity;
@@ -38,12 +52,18 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        fpsCamera.fieldOfView = fov;
+        yaw += speedH * Input.GetAxis("Mouse X");
+        pitch += speedV * Input.GetAxis("Mouse Y");
+
+        transform.eulerAngles = new Vector3(-pitch, yaw, 0.0f);
+
         var lastTimeTillSlid = Time.time;
         // Check on grounding state
         isGrounded = characterController.isGrounded;
@@ -84,14 +104,14 @@ public class PlayerManager : MonoBehaviour
                 Slide();
                 break;
             default:
-                fpsCamera.transform.position = Vector3.Lerp(fpsCamera.transform.position, originalCameraSlidePosition.transform.position, Time.deltaTime * Sprint_LerpScaleTime);
+                //fpsCamera.transform.position = Vector3.Lerp(fpsCamera.transform.position, originalCameraSlidePosition.transform.position, Time.deltaTime * Sprint_LerpScaleTime);
                 timeInSlide = 0;
                 break;
         }
 
 
 
-        
+
 
         // Run Running Function
         switch (isRunning)
@@ -136,11 +156,11 @@ public class PlayerManager : MonoBehaviour
         switch (active)
         {
             case true:
-                fpsCamera.fieldOfView = 80;
+                fpsCamera.fieldOfView = fov + 5;
 
                 break;
             case false:
-                fpsCamera.fieldOfView = 70;
+                fpsCamera.fieldOfView = fov;
                 break;
         }
     }
@@ -156,7 +176,7 @@ public class PlayerManager : MonoBehaviour
             return;
         }
 
-        fpsCamera.transform.position = Vector3.Lerp(fpsCamera.transform.position, cameraSlidePosition.transform.position, Time.deltaTime * Sprint_LerpScaleTime);
+
         Vector3 slide = transform.forward * NetSlideSpeed;
         characterController.Move(slide * Time.deltaTime);
     }
